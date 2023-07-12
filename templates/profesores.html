@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{fontawesome_html()}}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>☀️Verano Cientifico🧪</title>
+
+    <script
+      src="https://kit.fontawesome.com/8dd5d9b472.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <style>
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f8f9fa;
+      padding: 10px 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar-brand-text {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .navbar-nav {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-item:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .hamburger-menu {
+      position: relative;
+    }
+
+    .menu-btn {
+      display: block;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .menu-btn-burger,
+    .menu-btn-burger::before,
+    .menu-btn-burger::after {
+      content: "";
+      display: block;
+      background-color: #333;
+      height: 3px;
+      width: 25px;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-btn-burger::before,
+    .menu-btn-burger::after {
+      position: absolute;
+    }
+
+    .menu-btn-burger::before {
+      transform: translateY(-8px);
+    }
+
+    .menu-btn-burger::after {
+      transform: translateY(8px);
+    }
+
+    .menu-items {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: #f8f9fa;
+      list-style-type: none;
+      padding: 0;
+      margin: 5px 0;
+      display: none;
+    }
+
+    .menu-items li {
+      padding: 8px 15px;
+    }
+
+    .menu-items li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    input[type="checkbox"]:checked ~ .menu-items {
+      display: block;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      align-content: center;
+
+      width: 10vw;
+    }
+
+    .documents {
+      margin-top: 10px;
+      padding: 10px 20px;
+      width: 100%;
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+    }
+
+    .documents > *:nth-child(odd) {
+      background-color: #1d88f47a;
+    }
+
+    .card{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      align-content: center;
+      width: 80%;
+      margin: 10px;
+  
+      /* background-color: #1d88f47a; */
+      border-radius: 10px;
+      border: 2px solid #1d88f47a;
+      padding: 10px 20px;
+    }
+
+    ul{
+      list-style-type: none;
+    }
+
+    li{
+      margin: 10px 0;
+    }
+
+    a{
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+   
+
+    /* Estilos de la ventana modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.671);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      text-align: center;
+      width: 400px;
+    }
+
+    .modal-content h1 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      height: 200px;
+      resize: none;
+      padding: 5px;
+      margin-bottom: 20px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 180px;
+      right: 500px;
+      color: #d8d8d8;
+      cursor: pointer;
+      font-size: 2rem;
+    }
+
+    .proyecto{
+      font-size: 1.5rem;
+    }
+
+    .slider{
+      width: 100%;
+      height: 80%;
+      position: relative;
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: scroll;
+      scroll-snap-type: x mandatory;
+    }
+
+    .slider .card{
+      
+      position: sticky;
+      scroll-snap-align: center;
+    }
+
+    .slider .card:nth-child(odd){
+      background-color: #1d88f47a;
+    }
+
+    .open-modal2{
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: #333;
+      font-size: 1rem;
+    }
+
+    .open-modal2:hover{
+      /* mouse pointer */
+      cursor: pointer;
+    }
+
+  </style>
+
+  <body>
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <span class="nav-link">Bienvenido profesor {{ profesor['name'] }}</span>
+      </div>
+      <div class="navbar-brand">
+        <div style="display: flex;">
+          <form action="{{url_for("profesores_user", profesor=profesor['id'])}}" method="post">
+            <input type="text" style="margin-right: 10px;" name="search" id="search">
+            <button type="submit">search</button>
+          </form>
+        </div>
+      </div>
+      <div class="navbar-menu">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('profesores_logout') }}">Logout</a>
+          </li>
+        </ul>
+        <div class="hamburger-menu">
+          <input id="menu-toggle" type="checkbox" />
+          <label class="menu-btn" for="menu-toggle">
+            <span class="menu-btn-burger"></span>
+          </label>
+          <ul class="menu-items">
+            <li><a href="#">Mi Perfil</a></li>
+            <li><a href="#">Seguimiento</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="slider">
+      {% for i in data%}
+        <div class="card">
+          <div class="info">
+            <div>
+              <p class="proyecto">Proyecto: <h1>{{i["document"]["proyecto"]}}</h1></p>
+            </div>
+            <div>
+              <p>Estudiante: {{i["student"]["nombre"]}}</p>
+              <p>Numero de control: {{i["student"]["nc"]}}</p>
+            </div>
+            <div>
+              <p>Status: {{i["document"]["status"]}}</p>
+            </div>
+          </div>
+          <div class="buttons" style="display: flex; flex-direction: column; height: 80%; align-items: center; justify-content: space-evenly;">
+            <a href="#" class="btn btn-primary open-modal">Ver Resumen</a>
+            <br>
+            <a href="{{url_for('profesores_document', document=i["document"]["path"])}}" class="btn btn-primary">Descargar</a>
+            <br>
+            <!-- <a href="#" class="btn btn-primary open-modal2" onclick="(e)=>{console.log('Hola')}">Datos del alumno</a> -->
+            <button class="btn btn-primary open-modal2" data-student="{{i['student']}}" data-info="{{i['document']}}">Datos del alumno</button>
+          </div>
+        </div>
+      {%endfor%}
+    </div>
+
+    <!-- Ventana modal -->
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <h1>Resumen del archivo:</h1>
+        <textarea readonly>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+          Curabitur commodo libero a interdum iaculis. Morbi efficitur quam eget ex tempor cursus. 
+          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; 
+          Maecenas iaculis ultrices felis ac venenatis. Sed fermentum lacinia turpis, vitae rutrum odio scelerisque vitae. 
+          Phasellus posuere, erat sit amet volutpat condimentum, arcu purus vestibulum lacus, et viverra elit nisl et elit.
+        </textarea>
+        <span class="modal-close">&times;</span>
+      </div>
+    </div>
+    
+    <!-- Ventana modal2 -->
+    <div class="modal-overlay" id="modal">
+      <div class="modal-content" id="modal-content">
+        <h1>Datos del alumno:</h1>
+        <!-- quiero inputs -->
+        <form action="/actualizar" method="post" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <ul style="padding-left: 0;">
+            <li>
+              <input type="hidden" name="id" id="id" readonly>
+            </li>
+            <li>
+              <label for="nombre">Nombre:</label>
+              <input type="text" name="nombre" id="nombre"readonly>
+            </li>
+            <li>
+              <label for="nc">Numero de control:</label>
+              <input type="text" name="nc" id="nc" readonly>
+            </li>
+            <li>
+              <label for="carrera">Carrera:</label>
+              <input type="text" name="carrera" id="carrera" readonly>
+            </li>
+            <li>
+              <label for="email">Email:</label>
+              <input type="text" name="email" id="email" readonly>
+            </li>
+            <li>
+              <label for="telefono">Telefono:</label>
+              <input type="text" name="telefono" id="telefono">
+            </li>
+            <li>
+              <label for="proyecto">Proyecto:</label>
+              <input type="text" name="proyecto" id="proyecto" readonly>
+            </li>
+            <li>
+              <label for="status">Status:</label>
+              <input type="text" name="status" id="status" readonly>
+            </li>
+            <li>
+              <label for="fecha">Fecha:</label>
+              <input type="text" name="fecha" id="fecha">
+            </li>
+            <li>
+              <label for="comentarios">Comentarios:</label>
+              <textarea name="comentarios" id="comentarios" cols="30" rows="10"></textarea>
+            </li>
+          </ul>
+          <button type="submit">Guardar</button>
+        </form>
+        
+        <span class="modal-close" id="modal-close">&times;</span>
+      </div>
+    </div>
+    
+    <script>
+      // JavaScript para abrir y cerrar la ventana modal
+
+      const openModalButtons = document.querySelectorAll('.open-modal');
+      const modalOverlay = document.querySelector('.modal-overlay');
+      const modalCloseButton = document.querySelector('.modal-close');
+
+      const openModalButtons2 = document.querySelectorAll('.open-modal2');
+      const modalOverlay2 = document.getElementById('modal');
+      const modalCloseButton2 = document.getElementById('modal-close');
+
+      let student;
+      let info;
+
+      function openModal() {
+        modalOverlay.style.display = 'flex';
+      }
+
+      function openModal2() {
+        student = this.dataset.student;
+        info = this.dataset.info;
+        student = student.replaceAll("'", '"')
+        student = student.replaceAll('ObjectId', "")
+        student = student.replaceAll('(', "")
+        student = student.replaceAll(')', "")
+        info = info.replaceAll("'", '"')
+        info = info.replaceAll('ObjectId', "")
+        info = info.replaceAll('(', "")
+        info = info.replaceAll(')', "")
+        student = JSON.parse(student)
+        info = JSON.parse(info)
+        
+        document.getElementById('id').value = info['_id']
+        document.getElementById('nombre').value = student['nombre']
+        document.getElementById('nc').value = student['nc']
+        document.getElementById('carrera').value = student['carrera']
+        document.getElementById('email').value = student['correo']
+        // document.getElementById('telefono').value = student['telefono']
+        document.getElementById('proyecto').value = info['proyecto']
+        document.getElementById('status').value = info['status']
+        // document.getElementById('fecha').value = info['fecha']
+        // document.getElementById('comentarios').value = info['comentarios']
+
+        modalOverlay2.style.display = 'flex';
+      }
+
+      function closeModal() {
+        modalOverlay.style.display = 'none';
+      }
+
+      function closeModal2() {
+        modalOverlay2.style.display = 'none';
+      }
+
+      openModalButtons.forEach((button) => {
+        button.addEventListener('click', openModal);
+      });
+
+      openModalButtons2.forEach((button) => {
+        button.addEventListener('click', openModal2);
+      });
+
+      modalCloseButton.addEventListener('click', closeModal);
+
+      modalCloseButton2.addEventListener('click', closeModal2);
+
+    </script>
+  </body>
+</html>

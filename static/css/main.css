@@ -1,0 +1,58 @@
+body{
+    /* configuration body */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+
+    /* style of body */
+    background-color: #043353;
+}
+
+div.login{
+
+    /* configuration div */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60vw;
+    height: 60vh;
+    
+    /* style of div */
+    background-color: #d3dde64c;
+}
+
+form{
+    /* configuration form */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 50%;
+}
+
+img.logo{
+    /* configuration img */
+    width: 150px;
+    height: 150px;
+    margin: 1vh;
+    padding: 1vh;
+    border-radius: 50%;
+    border: 1px solid #000000;
+}
+
+input{
+    /* configuration input */
+    width: 50%;
+    height: 5vh;
+    margin: 1vh;
+    padding: 1vh;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}

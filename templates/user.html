@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{fontawesome_html()}}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>☀️Verano Cientifico🧪</title>
+
+    <script
+      src="https://kit.fontawesome.com/8dd5d9b472.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <style>
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f8f9fa;
+      padding: 10px 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar-brand-text {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .navbar-nav {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-item:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .hamburger-menu {
+      position: relative;
+    }
+
+    .menu-btn {
+      display: block;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .menu-btn-burger,
+    .menu-btn-burger::before,
+    .menu-btn-burger::after {
+      content: "";
+      display: block;
+      background-color: #333;
+      height: 3px;
+      width: 25px;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-btn-burger::before,
+    .menu-btn-burger::after {
+      position: absolute;
+    }
+
+    .menu-btn-burger::before {
+      transform: translateY(-8px);
+    }
+
+    .menu-btn-burger::after {
+      transform: translateY(8px);
+    }
+
+    .menu-items {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: #f8f9fa;
+      list-style-type: none;
+      padding: 0;
+      margin: 5px 0;
+      display: none;
+    }
+
+    .menu-items li {
+      padding: 8px 15px;
+    }
+
+    .menu-items li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    input[type="checkbox"]:checked ~ .menu-items {
+      display: block;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      align-content: center;
+
+      width: 10vw;
+    }
+
+
+    .documents{
+
+        width: auto;
+    }
+
+    .documents h2{
+        text-align: center;
+    }
+
+    .documents form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .documents form div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .documents form div label{
+        margin: 10px;
+    }
+
+    .documents form div input{
+        margin: 10px;
+    }
+
+    .documents form input[type="submit"]{
+        margin: 10px;
+        width: 200px;
+        /* background-color: rgb(124, 133, 133); */
+        border-radius: 10px;
+        border: none;
+    }
+  </style>
+
+  <body>
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <span class="nav-link">Bienvenido {{ estudiante['nombre'] }}</span>
+      </div>
+      <div class="navbar-menu">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+        <div class="hamburger-menu">
+          <input id="menu-toggle" type="checkbox" />
+          <label class="menu-btn" for="menu-toggle">
+            <span class="menu-btn-burger"></span>
+          </label>
+          <ul class="menu-items">
+            <li><a href="#">Mi Perfil</a></li>
+            <li><a href="#">Seguimiento</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="documents">
+        <h2>Sube tu archivo de Residencia</h2>
+        <form action="/documents" method="post" enctype="multipart/form-data">
+            <div>
+                <Label>Archivo pdf: </Label>
+                <input type="file" name="file" id="file" accept="application/pdf" required>
+            </div>
+            <div>
+              <label for="">Nombre del proyecto</label>
+              <input type="text" name="proyecto" id="proyecto" required>
+            </div>
+            <div>
+                <label>Selecciona tu profesor</label>
+                <Select required name="profesor" aria-required="true">
+                    {% for profesor in profesores %}
+                        <option value="{{ profesor['id'] }}" aria-required="true">{{ profesor['name'] }}</option>
+                    {% endfor %}
+                </Select>
+            </div>
+            <input type="submit" value="Subir">
+        </form>
+    </section>
+  </body>
+</html>
