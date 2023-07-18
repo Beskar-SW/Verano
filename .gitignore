@@ -8,4 +8,5 @@ __pycache__/
 flask_session/
 static/documents/*
 database/
+*.pdf
 ```

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_bootstrap import Bootstrap
@@ -16,6 +16,8 @@ import os
 import re
 import datetime
 import uuid
+
+from model import Model
 
 if not load_dotenv():
     print("No se pudo cargar el archivo .env")
@@ -312,6 +314,16 @@ def actualizar():
     estudiante.update_one({"nc": nc}, {"$set": {"nombre": nombre, "correo": email, "telefono": telefono, "carrera": carrera}})
 
     return redirect(url_for('profesores_user', profesor=session.get("profesor")))
+
+@app.route('/resumen', methods=['POST'])
+def resumen():
+    id = request.json['id']
+    per = 0.3
+    estudiantes_profesores_collection = db["Estudiante_Profesor"]
+    estudiante_profesor = estudiantes_profesores_collection.find_one({"_id": ObjectId(id)})
+    model = Model(os.path.join(os.path.dirname(__file__), 'static', 'documents', estudiante_profesor['path']), float(per))
+    summary = model.summarize()
+    return jsonify(summary)
 
 
 if __name__ == '__main__':

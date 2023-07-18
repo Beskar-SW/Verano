@@ -296,12 +296,12 @@
             </div>
           </div>
           <div class="buttons" style="display: flex; flex-direction: column; height: 80%; align-items: center; justify-content: space-evenly;">
-            <a href="#" class="btn btn-primary open-modal">Ver Resumen</a>
+            <a href="#" class="btn btn-primary open-modal" data-info="{{i['document']}}">Ver Resumen</a>
             <br>
             <a href="{{url_for('profesores_document', document=i["document"]["path"])}}" class="btn btn-primary">Descargar</a>
             <br>
             <!-- <a href="#" class="btn btn-primary open-modal2" onclick="(e)=>{console.log('Hola')}">Datos del alumno</a> -->
-            <button class="btn btn-primary open-modal2" data-student="{{i['student']}}" data-info="{{i['document']}}">Datos del alumno</button>
+            <a class="btn btn-primary open-modal2" data-student="{{i['student']}}" data-info="{{i['document']}}">Datos del alumno</a>
           </div>
         </div>
       {%endfor%}
@@ -311,11 +311,7 @@
     <div class="modal-overlay">
       <div class="modal-content">
         <h1>Resumen del archivo:</h1>
-        <textarea readonly>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Curabitur commodo libero a interdum iaculis. Morbi efficitur quam eget ex tempor cursus. 
-          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; 
-          Maecenas iaculis ultrices felis ac venenatis. Sed fermentum lacinia turpis, vitae rutrum odio scelerisque vitae. 
-          Phasellus posuere, erat sit amet volutpat condimentum, arcu purus vestibulum lacus, et viverra elit nisl et elit.
+        <textarea readonly id="resumen">
         </textarea>
         <span class="modal-close">&times;</span>
       </div>
@@ -361,7 +357,7 @@
             </li>
             <li>
               <label for="fecha">Fecha:</label>
-              <input type="text" name="fecha" id="fecha">
+              <input type="date" name="fecha" id="fecha">
             </li>
             <li>
               <label for="comentarios">Comentarios:</label>
@@ -390,6 +386,31 @@
       let info;
 
       function openModal() {
+        info = this.dataset.info;
+        info = info.replaceAll("'", '"')
+        info = info.replaceAll('ObjectId', "")
+        info = info.replaceAll('(', "")
+        info = info.replaceAll(')', "")
+        info = JSON.parse(info)
+
+        var id = info['_id']
+        console.log(id)
+        fetch('{{url_for("resumen")}}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({id})
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          document.getElementById('resumen').textContent = data
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
         modalOverlay.style.display = 'flex';
       }
 
