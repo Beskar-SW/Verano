@@ -24,7 +24,7 @@ def index():
     usuario = collection.find_one({"usuario": usuario, "password": password})
 
     if usuario:
-        session["usuario"] = usuario["usuario"]
+        # session["usuario"] = usuario["usuario"]
         return jsonify({"status": "success"}), 200, {'Access-Control-Allow-Origin': '*'}
     else:
         return jsonify({"status": "failed"}), 401, {'Access-Control-Allow-Origin': '*'}
@@ -39,8 +39,8 @@ def search_place():
     lng = data["lng"]
     keyword = data["keyword"]
 
-    session["lat"] = lat
-    session["lng"] = lng
+    # session["lat"] = lat
+    # session["lng"] = lng
 
     # place_info = gmaps.find_place(
     #     input=keyword,
@@ -63,63 +63,6 @@ def search_place():
 
     return jsonify(place_info), 200, {'Access-Control-Allow-Origin': '*'}
 
-@cross_origin()
-@app.route('/recomendaciones', methods=['POST'])
-def recomendaciones():
-
-    recomendacion = RecomendacionLugares.RecomendacionLugares()
-    user = str(session.get("usuario"))
-    
-    boleano = recomendacion.client.exists(user)
-
-    if not boleano:
-        redirect(url_for('recomendaciones2'))
-
-    recomendaciones_usuario = recomendacion.generar_recomendaciones(user, num_recomendaciones=5)
-
-    lista = []
-    for i in range(len(recomendaciones_usuario)):
-        # get info from gmaps
-        place_info = gmaps.find_place(
-            input=recomendaciones_usuario[i],
-            input_type="textquery",
-            fields=['geometry', 'name', 'geometry/location/lng', 
-            'geometry/location/lat', 'types', 'rating',
-            "formatted_address"],
-            language="es-MX",
-            location_bias=f"""circle:5000@{session.get("lat")},{session.get("lng")}"""
-        )
-
-        place_info = place_info["candidates"][0]
-        lista.append(place_info)
-
-    return jsonify(lista), 200, {'Access-Control-Allow-Origin': '*'}
-        
-@cross_origin()
-@app.route('/recomendaciones_new', methods=['POST'])
-def recomendaciones2():
-    recomendador = RecomendacionPopularidad.RecomendacionPopularidad()
-    num_recomendaciones = 5
-    recomendaciones = recomendador.recomendacion_popularidad(num_recomendaciones)
-    recomendaciones = recomendador.recomendacion_popularidad_aleatoria(num_recomendaciones)
-    
-    lista = []
-    for i in range(len(recomendaciones)):
-        # get info from gmaps
-        place_info = gmaps.find_place(
-            input=recomendaciones[i],
-            input_type="textquery",
-            fields=['geometry', 'name', 'geometry/location/lng', 
-            'geometry/location/lat', 'types', 'rating',
-            "formatted_address"],
-            language="es-MX",
-            location_bias=f"""circle:5000@{session.get("lat")},{session.get("lng")}"""
-        )
-
-        place_info = place_info["candidates"][0]
-        lista.append(place_info)
-
-    return jsonify(lista), 200, {'Access-Control-Allow-Origin': '*'}
 
 
 if __name__ == '__main__':
