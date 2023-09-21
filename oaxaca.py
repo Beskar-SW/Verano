@@ -55,7 +55,7 @@ def search_place():
     place_info = gmaps.places(
         query=keyword,
         location=(lat,lng),
-        radius=5000,
+        radius=1000,
         language="es-MX"
     )
 
